@@ -3,6 +3,14 @@ import Head from 'next/head';
 import GameCanvas from '@components/GameCanvas';
 
 const Home: NextPage = () => {
+  function renderGameCanvas() {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    return <GameCanvas />;
+  }
+
   return (
     <>
       <Head>
@@ -11,7 +19,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex items-center justify-center bg-black" style={{ height: '100svh', width: '100svw' }}>
-        <GameCanvas />
+        {renderGameCanvas()}
       </main>
     </>
   );

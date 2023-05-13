@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type P5 from 'p5';
 import dynamic from 'next/dynamic';
+import { initInputBindings } from '@/input/bindings';
 
 // import `react-p5` on client-side
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
@@ -29,9 +30,13 @@ function calcGrid(windowWidth: number, windowHeight: number, cellSize: number) {
 }
 
 const GameCanvas = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
+  useEffect(() => {
+    document.addEventListener('keydown', initInputBindings);
+
+    return () => {
+      document.removeEventListener('keydown', initInputBindings);
+    };
+  }, []);
 
   const { cellsX, cellsY, width, height } = calcGrid(window.innerWidth, window.innerHeight, CELL_SIZE);
 
