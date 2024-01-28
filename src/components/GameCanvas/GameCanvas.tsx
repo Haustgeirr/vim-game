@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import type P5 from 'p5';
 import dynamic from 'next/dynamic';
-import { initInputBindings } from '@/input/bindings';
+import Input from '@/input/bindings';
+import Player from '@/scripts/Player';
 
 // import `react-p5` on client-side
 const Sketch = dynamic(() => import('react-p5').then((mod) => mod.default), {
@@ -30,17 +31,20 @@ function calcGrid(windowWidth: number, windowHeight: number, cellSize: number) {
 }
 
 const GameCanvas = () => {
-  useEffect(() => {
-    document.addEventListener('keydown', initInputBindings);
+  // useEffect(() => {
+  //   document.addEventListener('keydown', initInputBindings);
 
-    return () => {
-      document.removeEventListener('keydown', initInputBindings);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener('keydown', initInputBindings);
+  //   };
+  // }, []);
 
   const { cellsX, cellsY, width, height } = calcGrid(window.innerWidth, window.innerHeight, CELL_SIZE);
 
   const setup = (p5: P5, canvasParentRef: Element) => {
+    const player = new Player(p5, p5.createVector(0, 0), CELL_SIZE);
+    const input = new Input(p5, player);
+
     p5.createCanvas(width, height).parent(canvasParentRef);
   };
 
